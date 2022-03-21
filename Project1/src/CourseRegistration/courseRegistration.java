@@ -17,10 +17,10 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @SuppressWarnings("serial")
 public class courseRegistration extends JFrame {
@@ -77,6 +77,7 @@ public class courseRegistration extends JFrame {
 		table.setCellSelectionEnabled(true);
 		table.setBounds(347, 147, 366, 293);
 		contentPane.add(table);
+		table_update();
 
 		JLabel lblNewLabel = new JLabel("STUDENT COURSE REGISTERATION");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 25));
@@ -142,6 +143,13 @@ public class courseRegistration extends JFrame {
 					pst.executeUpdate();
 					con.close();
 					JOptionPane.showMessageDialog(contentPane, "Record Addedd");
+					table_update();
+
+					stdName.setText("");
+					stdMatricNum.setText("");
+					stdCourseName.setText("");
+					stdName.requestFocus();
+
 				} catch (Exception e1) {
 					System.out.println(e1);
 				}
@@ -163,4 +171,39 @@ public class courseRegistration extends JFrame {
 		contentPane.add(btnEdit);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void table_update() {
+		int c;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/mysql", "root", "");
+
+			PreparedStatement stmt = con.prepareStatement("select * from stdcourseregister");
+			ResultSet rs = stmt.executeQuery();
+			ResultSetMetaData Rss = rs.getMetaData();
+
+			c = Rss.getColumnCount();
+
+			DefaultTableModel Df = (DefaultTableModel) table.getModel();
+			Df.setRowCount(0);
+
+			while (rs.next()) {
+				Vector v2 = new Vector();
+
+				for (int a = 1; a <= c; a++) {
+					v2.add(rs.getString("name"));
+					v2.add(rs.getString("matric"));
+					v2.add(rs.getString("course"));
+				}
+
+				Df.addRow(v2);
+
+			}
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(courseRegistration.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 }
