@@ -21,6 +21,11 @@ import java.sql.*;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
 public class courseRegistration extends JFrame {
@@ -58,25 +63,41 @@ public class courseRegistration extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"List Of Student", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel.setBounds(341, 131, 378, 315);
+		contentPane.add(panel);
+		panel.setLayout(null);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(6, 16, 366, 293);
+		panel.add(scrollPane);
+
 		table = new JTable();
+		scrollPane.setViewportView(table);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+			}
+		});
 		table.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "Student Name", "Matric Number", "Course Name" }) {
-			@SuppressWarnings("rawtypes")
-			Class[] columnTypes = new Class[] { String.class, Integer.class, String.class };
+			Class[] columnTypes = new Class[] { String.class, String.class, String.class };
 
-			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 		});
 		table.getColumnModel().getColumn(0).setPreferredWidth(92);
 		table.getColumnModel().getColumn(1).setPreferredWidth(97);
+		table.getColumnModel().getColumn(2).setResizable(false);
 		table.getColumnModel().getColumn(2).setPreferredWidth(81);
 		table.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		table.setColumnSelectionAllowed(true);
 		table.setCellSelectionEnabled(true);
-		table.setBounds(347, 147, 366, 293);
-		contentPane.add(table);
 		table_update();
 
 		JLabel lblNewLabel = new JLabel("STUDENT COURSE REGISTERATION");
@@ -85,34 +106,42 @@ public class courseRegistration extends JFrame {
 		lblNewLabel.setBounds(171, 63, 435, 35);
 		contentPane.add(lblNewLabel);
 
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"Student Information", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel_1.setBounds(48, 152, 246, 195);
+		contentPane.add(panel_1);
+		panel_1.setLayout(null);
+
 		JLabel lblNewLabel_1 = new JLabel("Student Name");
+		lblNewLabel_1.setBounds(6, 27, 120, 19);
+		panel_1.add(lblNewLabel_1);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel_1.setBounds(54, 168, 120, 19);
-		contentPane.add(lblNewLabel_1);
 
 		JLabel lblNewLabel_2 = new JLabel("Student Matric Number");
+		lblNewLabel_2.setBounds(6, 88, 163, 19);
+		panel_1.add(lblNewLabel_2);
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel_2.setBounds(54, 229, 163, 19);
-		contentPane.add(lblNewLabel_2);
 
 		JLabel lblNewLabel_3 = new JLabel("Course Name");
+		lblNewLabel_3.setBounds(6, 151, 150, 19);
+		panel_1.add(lblNewLabel_3);
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel_3.setBounds(54, 293, 150, 19);
-		contentPane.add(lblNewLabel_3);
 
 		stdName = new JTextField();
-		stdName.setBounds(54, 198, 234, 20);
-		contentPane.add(stdName);
+		stdName.setBounds(6, 46, 234, 20);
+		panel_1.add(stdName);
 		stdName.setColumns(10);
 
 		stdMatricNum = new JTextField();
-		stdMatricNum.setBounds(54, 259, 233, 20);
-		contentPane.add(stdMatricNum);
+		stdMatricNum.setBounds(6, 107, 233, 20);
+		panel_1.add(stdMatricNum);
 		stdMatricNum.setColumns(10);
 
 		stdCourseName = new JTextField();
-		stdCourseName.setBounds(55, 321, 233, 20);
-		contentPane.add(stdCourseName);
+		stdCourseName.setBounds(7, 169, 233, 20);
+		panel_1.add(stdCourseName);
 		stdCourseName.setColumns(10);
 
 		JButton btnRegister = new JButton("Register");
