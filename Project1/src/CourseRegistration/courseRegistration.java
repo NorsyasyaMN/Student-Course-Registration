@@ -81,6 +81,12 @@ public class courseRegistration extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 
+				DefaultTableModel Df = (DefaultTableModel) table.getModel();
+				int selectedIndex = table.getSelectedRow();
+
+				stdName.setText(Df.getValueAt(selectedIndex, 0).toString());
+				stdMatricNum.setText(Df.getValueAt(selectedIndex, 1).toString());
+				stdCourseName.setText(Df.getValueAt(selectedIndex, 2).toString());
 			}
 		});
 		table.setModel(new DefaultTableModel(new Object[][] {},
@@ -195,6 +201,37 @@ public class courseRegistration extends JFrame {
 		contentPane.add(btnDelete);
 
 		JButton btnEdit = new JButton("Edit");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				String name = stdName.getText();
+				String matricNum = stdMatricNum.getText();
+				String courseName = stdCourseName.getText();
+
+				try {
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					Connection con = DriverManager.getConnection("jdbc:mysql://localhost/mysql", "root", "");
+
+					PreparedStatement pst = con
+							.prepareStatement("update stdcourseregister set name=?, course=? where matric =?");
+					pst.setString(1, name);
+					pst.setString(2, courseName);
+					pst.setString(3, matricNum);
+					pst.executeUpdate();
+					con.close();
+					JOptionPane.showMessageDialog(contentPane, "Record Updated");
+					table_update();
+
+					stdName.setText("");
+					stdMatricNum.setText("");
+					stdCourseName.setText("");
+					stdName.requestFocus();
+
+				} catch (Exception e1) {
+					System.out.println(e1);
+				}
+			}
+		});
 		btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnEdit.setBounds(119, 371, 87, 27);
 		contentPane.add(btnEdit);
