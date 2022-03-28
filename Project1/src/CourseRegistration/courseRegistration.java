@@ -196,6 +196,37 @@ public class courseRegistration extends JFrame {
 		contentPane.add(btnRegister);
 
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				String name = stdName.getText();
+				String matricNum = stdMatricNum.getText();
+				String courseName = stdCourseName.getText();
+
+				try {
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					Connection con = DriverManager.getConnection("jdbc:mysql://localhost/mysql", "root", "");
+
+					PreparedStatement pst = con.prepareStatement(
+							"delete from stdcourseregister where name= ? and course= ? and matric =?");
+					pst.setString(1, name);
+					pst.setString(2, courseName);
+					pst.setString(3, matricNum);
+					pst.executeUpdate();
+					con.close();
+					JOptionPane.showMessageDialog(contentPane, "Record Deleted");
+					table_update();
+
+					stdName.setText("");
+					stdMatricNum.setText("");
+					stdCourseName.setText("");
+					stdName.requestFocus();
+
+				} catch (Exception e1) {
+					System.out.println(e1);
+				}
+			}
+		});
 		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnDelete.setBounds(219, 371, 94, 27);
 		contentPane.add(btnDelete);
